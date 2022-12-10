@@ -1,9 +1,11 @@
 let self_name = localStorage.getItem("self_name");
+;let send_name = "";
 //let personList = JSON.parse(localStorage.getItem("personList"));
 function texts() {
   let people = document.querySelectorAll("#personButton");
   for (let i = 0; i < people.length; i++) {
     people[i].addEventListener('click', function() {
+      send_name = people[i].textContent;
       let messages = document.querySelector(".Texts");
       messages.innerHTML = `
   <input type="text" id="textmessage" name="newtext">
@@ -50,13 +52,12 @@ wss.addEventListener('open', function() {
   //  alert("Connection");
   //send("TEST");
   wss.addEventListener('message', (event) => {
-    alert('Message from server ' + decode_buffer(event.data));
-
+    //alert('Message from server ' + decode_buffer(event.data));
     let decoded = decode_buffer(event.data);
     let splitdecoded = decoded.split(';');
 
     if (splitdecoded[0] == "M:") {
-      if (splitdecoded[2] == self_name) {
+     // if (splitdecoded[2] == self_name) {
         alert(decoded);
         //add to textbook splitdecoded[2]
         let personWhoSent = document.querySelectorAll("#personButton");
@@ -67,7 +68,7 @@ wss.addEventListener('open', function() {
               sentTexts.innerHTML += `<p>${splitdecoded[3]}</p>`;
             });
         }
-      }
+      //}
     }
   });
 
@@ -76,8 +77,7 @@ wss.addEventListener('open', function() {
 
 
 function sendMSG() {
-  send("M:;" + self_name + ";Jaithra;" + document.getElementById('textmessage').value + "");
-  document.getElementById('textmessage').value = "";
+  send("M:;" + self_name + ";" + send_name + ";" + document.getElementById('textmessage').value + ""); document.getElementById('textmessage').value = "";
 }
 
 texts();

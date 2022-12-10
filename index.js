@@ -1,8 +1,9 @@
 var express = require('express');
 var ws = require('ws');
 var app = express();
+let x = -1;
 
-var ws_list = [];
+var ws_List_Map = new Map();
 var clients = [""]
 app.use(express.static(__dirname + '/client/'));
 
@@ -19,10 +20,14 @@ function send_to_ws(ws, message) {
   })));
 }
 
-function rewrite_template(splitdecoded) {
-  console.log("working");
-  for (let i = 0; i < ws_list.length; i++) {
-    send_to_ws(ws_list[i], splitdecoded[3]);
+function rewrite_template(decoded) {
+  let splitdecoded = decoded.split(';');
+  console.log(ws_List_Map);
+  if (!(splitdecoded[1] == undefined)) {
+    send_to_ws(ws_List_Map.get(splitdecoded[2]), decoded);
+  }
+  else {
+    send_to_ws(connectionws, decoded);
   }
 
   /*
@@ -32,24 +37,29 @@ function rewrite_template(splitdecoded) {
 }
 
 var ws_server = new ws.WebSocketServer({ server: server });
+let connectionws;
 ws_server.on('connection', ws => {
-  if (!ws_list.includes(ws)) ws_list.push(ws);
   clients.push("Jake");
   ws.on('message', data => {
     let decoded = decode_buffer(data);
     //  console.log(decoded);
     //send_to_ws(ws, decoded);
     let splitdecoded = decoded.split(';');
+
+    // console.log(connectionws);
     if (splitdecoded[0] == "N:") {
       clients.push(splitdecoded[1]);
-      console.log(clients[clients.length - 1]);
       alert((clients[clients.length - 1]))
+
+      if (!(splitdecoded[1] == undefined)) {
+        ws_List_Map.set(splitdecoded[1], ws);
+      }
+      else connectionws = ws;
     }
 
     else if (splitdecoded[0] == "M:") {
-      console.log(decoded);
-      rewrite_template(splitdecoded);
-      //send_to_ws(ws, decoded);
+      // console.log(decoded);
+      rewrite_template(decoded);
     }
   });
 });
