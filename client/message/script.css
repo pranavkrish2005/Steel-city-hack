@@ -90,3 +90,19 @@ html, body {
   width : 9%;
   float : right;
 }
+
+#Irecieve {
+  text-aligin : left;
+}
+
+#Igive {
+  text-align : right;
+}
+
+#DecryptBtn {
+  
+}
+
+#EncryptBtn {
+  
+}
