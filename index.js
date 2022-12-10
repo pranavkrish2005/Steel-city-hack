@@ -2,6 +2,7 @@ var express = require('express');
 var ws = require('ws');
 var app = express();
 
+var ws_list = [];
 var clients = [""]
 app.use(express.static(__dirname + '/client/'));
 
@@ -17,8 +18,23 @@ function send_to_ws(ws, message) {
     data: message
   })));
 }
+
+function sendMSGtoALL(splitdecoded) {
+  console.log("working");
+  for (var i = 0; i < ws_list.length; i++)
+    {
+      send_to_ws(ws_list[i], splitdecoded);
+    }
+
+  /*
+  1) Do send_to+ws(ws:make a list of ws a iteratarte) 
+  2) Try to change index.html from here
+  */
+}
+
 var ws_server = new ws.WebSocketServer({ server: server });
 ws_server.on('connection', ws => {
+  if (!ws_list.includes(ws)) ws_list.push(ws);
   clients.push("Jake");
   ws.on('message', data => {
     let decoded = decode_buffer(data);
@@ -33,7 +49,7 @@ ws_server.on('connection', ws => {
 
     else if (splitdecoded[0] == "M:") {
       console.log(decoded);
-      send_to_ws(ws, decoded);
+      sendMSGtoALL(splitdecoded);
     }
   });
 });
