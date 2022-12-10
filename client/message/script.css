@@ -1,0 +1,92 @@
+html, body {
+    color : white;
+    margin : 0;
+    border : 0;
+    padding : 0;
+}
+
+.TopLogo {
+    height : 20%;
+    width : 100%;
+    background-color: blue;
+    position : fixed;
+    float : top;
+}
+
+.Page {
+    float : bottom;
+    height : 100%;
+    width : 100%;
+    position : fixed;
+    top : 20%;
+}
+
+.People {
+    position: relative;
+    float : left;
+    height: 100%;
+    width: 30%;
+    background-color: pink;
+    overflow: scroll;
+}
+
+#AddBtn {
+    font-weight: bold;
+    font-size: medium;
+    text-align : center;
+    background-color: black;
+    color : white;
+}
+
+#AddBtn:hover {
+    background-color: white;
+    color : black;
+}
+
+.Texts {
+    position: relative;
+    float : right;
+    height : 100%;
+    width : 70%;
+    background-color: purple;
+    overflow: visible;
+}
+
+#ListOfNames {
+    list-style: none;
+    padding: 0;
+}
+
+#personButton {
+    background-color : inherit;
+    padding-left : 30px;
+    border-width:3px;
+    border-style:solid;
+    border-color: grey;
+    padding-top : 10px;
+    padding-bottom : 10px;
+    width : 100%;
+}
+
+#personButton:hover {
+    background-color: lightblue;
+}
+
+#textmessage, #sendBtn {
+  border-radius: 25px;
+  position : fixed;
+}
+
+#textmessage {
+  margin-left : 5px;
+  bottom : 0;
+  width : 60%;
+  float : left
+}
+
+#sendBtn {
+  right : 0;
+  bottom : 0;
+  width : 9%;
+  float : right;
+}
