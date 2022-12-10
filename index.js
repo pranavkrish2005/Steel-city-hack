@@ -19,12 +19,11 @@ function send_to_ws(ws, message) {
   })));
 }
 
-function sendMSGtoALL(splitdecoded) {
+function rewrite_template(splitdecoded) {
   console.log("working");
-  for (var i = 0; i < ws_list.length; i++)
-    {
-      send_to_ws(ws_list[i], splitdecoded);
-    }
+  for (let i = 0; i < ws_list.length; i++) {
+    send_to_ws(ws_list[i], splitdecoded[3]);
+  }
 
   /*
   1) Do send_to+ws(ws:make a list of ws a iteratarte) 
@@ -49,7 +48,8 @@ ws_server.on('connection', ws => {
 
     else if (splitdecoded[0] == "M:") {
       console.log(decoded);
-      sendMSGtoALL(splitdecoded);
+      rewrite_template(splitdecoded);
+      //send_to_ws(ws, decoded);
     }
   });
 });
@@ -65,3 +65,11 @@ Bob:Jack:"ehsjfnswj"
 
 */
 
+/*
+
+TODO
+Make the msg appear properly on text field
+twist
+
+
+*/
