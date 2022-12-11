@@ -1,14 +1,25 @@
 html, body {
-    color : white;
+    color : black;
     margin : 0;
     border : 0;
     padding : 0;
+    background-image : url("TextsWallpaper.jpeg");
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#placeholder {
+  font-weight: bold;
+  margin : 5px;
+  font-size : large;
 }
 
 .TopLogo {
     height : 20%;
     width : 100%;
-    background-color: blue;
     position : fixed;
     float : top;
 }
@@ -26,7 +37,6 @@ html, body {
     float : left;
     height: 100%;
     width: 30%;
-    background-color: pink;
     overflow: scroll;
 }
 
@@ -36,6 +46,7 @@ html, body {
     text-align : center;
     background-color: black;
     color : white;
+  border-radius: 25px;
 }
 
 #AddBtn:hover {
@@ -48,7 +59,7 @@ html, body {
     float : right;
     height : 100%;
     width : 70%;
-    background-color: purple;
+    background-color: black;
     overflow: visible;
 }
 
@@ -58,18 +69,19 @@ html, body {
 }
 
 #personButton {
-    background-color : inherit;
+    background-color : white;
     padding-left : 30px;
     border-width:3px;
     border-style:solid;
-    border-color: grey;
+    border-color: black;
     padding-top : 10px;
     padding-bottom : 10px;
     width : 100%;
 }
 
 #personButton:hover {
-    background-color: lightblue;
+    background-color: blue;
+  color : white;
 }
 
 #textmessage, #sendBtn {
@@ -78,10 +90,10 @@ html, body {
 }
 
 #textmessage {
-  margin-left : 5px;
   bottom : 0;
   width : 60%;
   float : left
+  padding : 10px;
 }
 
 #sendBtn {
@@ -93,8 +105,41 @@ html, body {
 
 #Irecieve {
   text-aligin : left;
+  font-size: 30px;
+  padding-left : 20px;
+  color : white;
 }
 
 #Igive {
   text-align : right;
+  font-size: 30px;
+  padding-right: 30px;
+  color : white;
+}
+
+#Addperson {
+  border-radius: 25px;
+  padding : 5px;
+}
+
+#TopLogo {
+  display : flex;
+  flex-direction: column;
+}
+
+#hackBtn {
+  margin : 5px;
+  border-radius : 10px;
+  background-color: transparent;
+}
+
+#encNum {
+  border-radius : 10px;
+  margin : 5px;
+}
+
+#encryptBtn {
+  border-radius : 10px;
+  margin : 5px;
+  background-color: transparent;
 }

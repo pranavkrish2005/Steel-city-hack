@@ -1,6 +1,6 @@
 let self_name = localStorage.getItem("self_name");
 ; let send_name = "";
-var msg_sent = "sfsf";
+var msg_sent = "";
 var encrypted_msg = "";
 let encrypt_num = 0;
 var alphaList = [
@@ -8,7 +8,6 @@ var alphaList = [
   "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
 document.getElementById("placeholder").innerHTML = ` <p>Username :  ${localStorage.getItem("self_name")}</p>`;
-//let personList = JSON.parse(localStorage.getItem("personList"));
 function texts() {
   let people = document.querySelectorAll("#personButton");
   for (let i = 0; i < people.length; i++) {
@@ -31,14 +30,11 @@ document.getElementById("encryptBtn").addEventListener('click', function() {
 
 document.getElementById("AddBtn").addEventListener('click', function() {
   let person = document.getElementById('Addperson').value;
-  // if(personList.includes(person))
-  // {
   document.getElementById("ListOfNames").innerHTML += `<li id="nameList">
                         <button type="button" id="personButton">${person}</button>
                     </li>`;
   document.getElementById('Addperson').value = "";
   texts();
-  //}
 });
 
 
@@ -48,11 +44,6 @@ let encoder = new TextEncoder();
 let decoder = new TextDecoder();
 
 function send(message) {
-  // msg_sent = "\n " + document.getElementById('textmessage').value;
-  console.log(msg_sent);
-  msg_sent = msg_sent.toLowerCase();
-  console.log(msg_sent + " " + encrypt_num);
-  localStorage.setItem("msg_sent", msg_sent);
   wss.send(encoder.encode(JSON.stringify({
     data: message
   })));
@@ -66,26 +57,20 @@ wss.addEventListener('open', function() {
 });
 
 wss.addEventListener('open', function() {
-  //  alert("Connection");
-  //send("TEST");
   wss.addEventListener('message', (event) => {
-    //alert('Message from server ' + decode_buffer(event.data));
     let decoded = decode_buffer(event.data);
     let splitdecoded = decoded.split(';');
-
+    console.log(splitdecoded[0]);
+    
     if (splitdecoded[0] == "M:") {
       if (splitdecoded[2] == self_name) {
-        //alert(decoded);
         var sender = splitdecoded[1];
         var msg = splitdecoded[3];
-        //add to textbook splitdecoded[2]
 
         let personWhoSent = document.querySelectorAll("#personButton");
         for (let i = 0; i < personWhoSent.length; i++) {
-          //console.log(personWhoSent[i].textContent + " : " + sender);
 
           if (personWhoSent[i].textContent == sender) {
-            //console.log("works");
             let sentTexts = document.querySelector(".Texts");
             sentTexts.innerHTML += `<p id="Irecieve">${msg}</p>`;
           }
@@ -94,44 +79,35 @@ wss.addEventListener('open', function() {
       else if (splitdecoded[1] == self_name) {
         var texter = splitdecoded[2];
         var msg = splitdecoded[3];
-        //add to textbook splitdecoded[2]
 
         let personWhoSent = document.querySelectorAll("#personButton");
         for (let i = 0; i < personWhoSent.length; i++) {
-          //console.log(personWhoSent[i].textContent + " : " + texter);
 
           if (personWhoSent[i].textContent == texter) {
-            // console.log("works");
             let sentTexts = document.querySelector(".Texts");
             sentTexts.innerHTML += `<p id="Igive">${msg}</p>`;
+            msg_sent = "// " + msg.toLowerCase();
+            console.log(encrypt_num);
           }
         }
       }
 
     }
 
-    else if (splitdecoded[0] == "HR:") { // HR:;hackerName;hackedName; 
-      if (splitdecoded[2] == self_name) {//selfname = j
+    else if (splitdecoded[0] == "HR:") {
+      if (splitdecoded[2] == self_name) {
         send("H:;" + self_name + ";" + splitdecoded[1] + ";" + msg_sent + ";" + encrypt_num);
       }
 
     }
     else if (splitdecoded[0] == "H:") {
-      consol.log(splitdecoded[2]);
-      if (splitdecoded[2] == self_name) { //hacker = 2
-        //var msg = encrypt_textfile(splitdecoded[3], splitdecoded[4]);
-        // console.log(msg);
-        //alert(msg);
-        //  console.log(decrypt_textfile(msg, 1));
-        
-      }
-      //get userinfo, encrypted  etc
-      /*
-      encrypt_num
-      msg_sent
-      
-      */
+  
+      if (splitdecoded[2] == self_name) {
+        localStorage.setItem("msg", splitdecoded[3]);
+        localStorage.setItem("msg_sent", JSON.stringify(encrypt_textfile(splitdecoded[3], splitdecoded[4])));
+        window.location.href = "./hacking.html";
 
+      }
     }
 
   });
@@ -150,21 +126,29 @@ document.querySelector("#hackBtn").addEventListener('click', function() {
   send("HR:;" + self_name + ";" + send_name + "");
   window.location.href = "./hacking.html";
 })
-// document.querySelector("#EncryptBtn").addEventListener('click', encrypt_textfile())
 
 
 function encrypt_textfile(msg_var, num) {
-  let msg_list = msg_var.split('');
+  num = parseInt(num);
+  let msg_list = msg_var.split("");
   for (var i = 0; i < msg_list.length; i++) {
-    if (alphaList.includes(msg_list[i]))
-      encrypted_msg += alphaList[(alphaList.indexOf(msg_list[i]) + num)%26];
-    else encrypted_msg += msg_list[i];
+    if (alphaList.includes(msg_list[i])){
+      
+      encrypted_msg += alphaList[(alphaList.indexOf(msg_list[i]) + num) % 26];
+      console.log(num);
+      
+    }    else encrypted_msg += msg_list[i];
+    
   }
+
+  
+  
+  localStorage.setItem("encrypted_msg", JSON.stringify(encrypted_msg));
   return encrypted_msg;
 }
-/*
-function decrypt_textfile(msg_var, num) {
 
+function decrypt_textfile(msg_var, num) {
+num = parseInt(num);
   let msg_list = msg_var.split('');
   for (var i = 0; i < msg_list.length; i++) {
     if (alphaList.includes(msg_list[i]))
@@ -173,12 +157,3 @@ function decrypt_textfile(msg_var, num) {
   }
   return encrypted_msg;
 }
-*/
-
-/*
-
-a 2
-
-(index(a) + 2)%26 => index(c);
-
-*/

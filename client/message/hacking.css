@@ -1,0 +1,21 @@
+.allmessages{
+  text-align : left;
+  font-size: 20px;
+}
+
+#decryptBtn {
+  background-color: transparent;
+  border-radius : 10px;
+}
+
+#decNum {
+  border-radius : 10px;
+}
+
+.allmessages {
+  color : white;
+  border-width:3px;
+  border-style:solid;
+  border-color: white;
+  background-color : black;
+}

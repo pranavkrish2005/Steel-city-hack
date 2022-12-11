@@ -39,9 +39,6 @@ ws_server.on('connection', ws => {
   ws.on('message', data => {
     let decoded = decode_buffer(data);
     console.log(decoded);
-
-    //  console.log(decoded);
-    //send_to_ws(ws, decoded);
     let splitdecoded = decoded.split(';');
     if (splitdecoded[0] == "N:") {
       clients.push(splitdecoded[1]);
@@ -51,7 +48,6 @@ ws_server.on('connection', ws => {
 
     else if (splitdecoded[0] == "M:" || splitdecoded[0] == "H:" || splitdecoded[0] == "HR:") {
       rewrite_template(decoded);
-      //send_to_ws(ws, decoded);
     }
   });
 

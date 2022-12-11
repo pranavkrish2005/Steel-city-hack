@@ -10,7 +10,7 @@ document.querySelector("#logInBtn").addEventListener('click', function() {
     
   }
   else {
-    alert("Enter a new username");
+    document.querySelector('.LoginArea').innerHTML = `<p id="errorUsername">Username cannot be blank!</p>` + document.querySelector('.LoginArea').innerHTML;
   }
 
   send(person);
