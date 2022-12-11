@@ -103,14 +103,14 @@ wss.addEventListener('open', function() {
 
     }
 
-    else if (splitdecoded[0] = "HR:") { // HR:;hackerName;hackedName; 
+    else if (splitdecoded[0] == "HR:") { // HR:;hackerName;hackedName; 
       if (splitdecoded[2] == self_name) {//selfname = j
         console.log("run");
         send("H:;" + self_name + ";" + splitdecoded[1] + ";" + msg_sent + ";" + encrypt_num);
       }
 
     }
-    else if (splitdecoded[0] = "H:") {
+    else if (splitdecoded[0] == "H:") {
       consol.log(splitdecoded[2]);
       if (splitdecoded[2] == self_name) { //hacker = 2
         //var msg = encrypt_textfile(splitdecoded[3], splitdecoded[4]);
@@ -141,7 +141,7 @@ function sendMSG() {
 texts();
 
 document.querySelector("#hackBtn").addEventListener('click', function() {
-  send("HR:;" + self_name + ";" + "j" + "");
+  send("HR:;" + self_name + ";" + "jai" + "");
 })
 // document.querySelector("#EncryptBtn").addEventListener('click', encrypt_textfile())
 
