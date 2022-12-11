@@ -21,7 +21,6 @@ function send_to_ws(ws, message) {
 
 function rewrite_template(decoded) {
   let splitdecoded = decoded.split(';');
-  console.log("working");
   for (let i = 0; i < ws_list.length; i++) {
 
     send_to_ws(ws_list[i], decoded);
@@ -39,6 +38,8 @@ ws_server.on('connection', ws => {
   clients.push("Jake");
   ws.on('message', data => {
     let decoded = decode_buffer(data);
+    console.log(decoded);
+
     //  console.log(decoded);
     //send_to_ws(ws, decoded);
     let splitdecoded = decoded.split(';');
@@ -48,12 +49,13 @@ ws_server.on('connection', ws => {
       alert((clients[clients.length - 1]))
     }
 
-    else if (splitdecoded[0] == "M:") {
-      console.log(decoded);
+    else if (splitdecoded[0] == "M:" || splitdecoded[0] == "H:" || splitdecoded[0] == "HR:") {
       rewrite_template(decoded);
       //send_to_ws(ws, decoded);
     }
   });
+
+
 });
 
 /*

@@ -66,7 +66,7 @@ wss.addEventListener('open', function() {
     let splitdecoded = decoded.split(';');
 
     if (splitdecoded[0] == "M:") {
-      console.log(decoded);
+      console.log("decoded");
       if (splitdecoded[2] == self_name) {
         //alert(decoded);
         var sender = splitdecoded[1];
@@ -75,10 +75,10 @@ wss.addEventListener('open', function() {
 
         let personWhoSent = document.querySelectorAll("#personButton");
         for (let i = 0; i < personWhoSent.length; i++) {
-          console.log(personWhoSent[i].textContent + " : " + sender);
+          //console.log(personWhoSent[i].textContent + " : " + sender);
 
           if (personWhoSent[i].textContent == sender) {
-            console.log("works");
+            //console.log("works");
             let sentTexts = document.querySelector(".Texts");
             sentTexts.innerHTML += `<p id="Irecieve">${msg}</p>`;
           }
@@ -91,10 +91,10 @@ wss.addEventListener('open', function() {
 
         let personWhoSent = document.querySelectorAll("#personButton");
         for (let i = 0; i < personWhoSent.length; i++) {
-          console.log(personWhoSent[i].textContent + " : " + texter);
+          //console.log(personWhoSent[i].textContent + " : " + texter);
 
           if (personWhoSent[i].textContent == texter) {
-            console.log("works");
+            // console.log("works");
             let sentTexts = document.querySelector(".Texts");
             sentTexts.innerHTML += `<p id="Igive">${msg}</p>`;
           }
@@ -103,17 +103,29 @@ wss.addEventListener('open', function() {
 
     }
 
-    else if (splitdeoced[0] = "H:") {
-      if(splitdecoded[2] = self_name)
-        send("H:;" + self_name + ";" + msg_sent + ";" + encrypt_num);
+    else if (splitdecoded[0] = "HR:") { // HR:;hackerName;hackedName; 
+      if (splitdecoded[2] == self_name) {//selfname = j
+        console.log("run");
+        send("H:;" + self_name + ";" + splitdecoded[1] + ";" + msg_sent + ";" + encrypt_num);
+      }
+
     }
     else if (splitdecoded[0] = "H:") {
+      consol.log(splitdecoded[2]);
+      if (splitdecoded[2] == self_name) { //hacker = 2
+        //var msg = encrypt_textfile(splitdecoded[3], splitdecoded[4]);
+        // console.log(msg);
+        //alert(msg);
+        //  console.log(decrypt_textfile(msg, 1));
+        console.log("is this runiing");
+      }
       //get userinfo, encrypted  etc
       /*
       encrypt_num
       msg_sent
       
       */
+
     }
 
   });
@@ -128,8 +140,10 @@ function sendMSG() {
 
 texts();
 
-document.querySelector("#DecryptBtn").addEventListener('click', decrypt_textfile())
-document.querySelector("#EncryptBtn").addEventListener('click', encrypt_textfile())
+document.querySelector("#hackBtn").addEventListener('click', function() {
+  send("HR:;" + self_name + ";" + "j" + "");
+})
+// document.querySelector("#EncryptBtn").addEventListener('click', encrypt_textfile())
 
 
 function encrypt_textfile(msg_var, num) {
@@ -139,10 +153,18 @@ function encrypt_textfile(msg_var, num) {
       encrypted_msg += alphaList[alphaList.indexOf(msg_list[i]) + num];
     else encrypted_msg += msg_list[i];
   }
+  return encrypted_msg;
 }
 
-function decrypt_textfile() {
+function decrypt_textfile(msg_var, num) {
 
+  msg_list = msg_var.split('');
+  for (var i = 0; i < msg_list.length; i++) {
+    if (alphaList.includes(msg_list[i]))
+      encrypted_msg += alphaList[alphaList.indexOf(msg_list[i]) + 26 - num];
+    else encrypted_msg += msg_list[i];
+  }
+  return encrypted_msg;
 }
 
 
