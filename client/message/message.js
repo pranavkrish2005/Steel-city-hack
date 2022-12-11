@@ -1,14 +1,13 @@
 let self_name = localStorage.getItem("self_name");
 ; let send_name = "";
-var msg_sent = "";
+var msg_sent = "sfsf";
 var encrypted_msg = "";
 let encrypt_num = 0;
 var alphaList = [
   "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l",
   "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
-
-
+document.getElementById("placeholder").innerHTML = ` <p>Username :  ${localStorage.getItem("self_name")}</p>`;
 //let personList = JSON.parse(localStorage.getItem("personList"));
 function texts() {
   let people = document.querySelectorAll("#personButton");
@@ -25,6 +24,10 @@ function texts() {
   }
 }
 
+document.getElementById("encryptBtn").addEventListener('click', function() {
+  encrypt_num = document.getElementById("encNum").value;
+  
+});
 
 document.getElementById("AddBtn").addEventListener('click', function() {
   let person = document.getElementById('Addperson').value;
@@ -45,6 +48,11 @@ let encoder = new TextEncoder();
 let decoder = new TextDecoder();
 
 function send(message) {
+  // msg_sent = "\n " + document.getElementById('textmessage').value;
+  console.log(msg_sent);
+  msg_sent = msg_sent.toLowerCase();
+  console.log(msg_sent + " " + encrypt_num);
+  localStorage.setItem("msg_sent", msg_sent);
   wss.send(encoder.encode(JSON.stringify({
     data: message
   })));
@@ -66,7 +74,6 @@ wss.addEventListener('open', function() {
     let splitdecoded = decoded.split(';');
 
     if (splitdecoded[0] == "M:") {
-      console.log("decoded");
       if (splitdecoded[2] == self_name) {
         //alert(decoded);
         var sender = splitdecoded[1];
@@ -105,7 +112,6 @@ wss.addEventListener('open', function() {
 
     else if (splitdecoded[0] == "HR:") { // HR:;hackerName;hackedName; 
       if (splitdecoded[2] == self_name) {//selfname = j
-        console.log("run");
         send("H:;" + self_name + ";" + splitdecoded[1] + ";" + msg_sent + ";" + encrypt_num);
       }
 
@@ -117,7 +123,7 @@ wss.addEventListener('open', function() {
         // console.log(msg);
         //alert(msg);
         //  console.log(decrypt_textfile(msg, 1));
-        console.log("is this runiing");
+        
       }
       //get userinfo, encrypted  etc
       /*
@@ -133,40 +139,41 @@ wss.addEventListener('open', function() {
 });
 
 function sendMSG() {
-  msg_sent += "\n " + document.getElementById('textmessage').value;
-  msg_sent = msg_sent.toLowerCase();
-  send("M:;" + self_name + ";" + send_name + ";" + document.getElementById('textmessage').value + ""); document.getElementById('textmessage').value = "";
+  send("M:;" + self_name + ";" + send_name + ";" + 
+  document.getElementById('textmessage').value + "");     
+  document.getElementById('textmessage').value = "";
 }
 
 texts();
 
 document.querySelector("#hackBtn").addEventListener('click', function() {
-  send("HR:;" + self_name + ";" + "jai" + "");
+  send("HR:;" + self_name + ";" + send_name + "");
+  window.location.href = "./hacking.html";
 })
 // document.querySelector("#EncryptBtn").addEventListener('click', encrypt_textfile())
 
 
 function encrypt_textfile(msg_var, num) {
-  msg_list = msg_var.split('');
+  let msg_list = msg_var.split('');
   for (var i = 0; i < msg_list.length; i++) {
     if (alphaList.includes(msg_list[i]))
-      encrypted_msg += alphaList[alphaList.indexOf(msg_list[i]) + num];
+      encrypted_msg += alphaList[(alphaList.indexOf(msg_list[i]) + num)%26];
     else encrypted_msg += msg_list[i];
   }
   return encrypted_msg;
 }
-
+/*
 function decrypt_textfile(msg_var, num) {
 
-  msg_list = msg_var.split('');
+  let msg_list = msg_var.split('');
   for (var i = 0; i < msg_list.length; i++) {
     if (alphaList.includes(msg_list[i]))
-      encrypted_msg += alphaList[alphaList.indexOf(msg_list[i]) + 26 - num];
+      encrypted_msg += alphaList[(alphaList.indexOf(msg_list[i]) + 26 - num)%26];
     else encrypted_msg += msg_list[i];
   }
   return encrypted_msg;
 }
-
+*/
 
 /*
 
