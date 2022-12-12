@@ -38,11 +38,9 @@ ws_server.on('connection', ws => {
   clients.push("Jake");
   ws.on('message', data => {
     let decoded = decode_buffer(data);
-    console.log(decoded);
     let splitdecoded = decoded.split(';');
     if (splitdecoded[0] == "N:") {
       clients.push(splitdecoded[1]);
-      console.log(clients[clients.length - 1]);
       alert((clients[clients.length - 1]))
     }
 

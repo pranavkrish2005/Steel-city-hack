@@ -8,6 +8,7 @@ var alphaList = [
   "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 
 document.getElementById("placeholder").innerHTML = ` <p>Username :  ${localStorage.getItem("self_name")}</p>`;
+//let personList = JSON.parse(localStorage.getItem("personList"));
 function texts() {
   let people = document.querySelectorAll("#personButton");
   for (let i = 0; i < people.length; i++) {
@@ -30,11 +31,14 @@ document.getElementById("encryptBtn").addEventListener('click', function() {
 
 document.getElementById("AddBtn").addEventListener('click', function() {
   let person = document.getElementById('Addperson').value;
+  // if(personList.includes(person))
+  // {
   document.getElementById("ListOfNames").innerHTML += `<li id="nameList">
                         <button type="button" id="personButton">${person}</button>
                     </li>`;
   document.getElementById('Addperson').value = "";
   texts();
+  //}
 });
 
 
@@ -57,20 +61,26 @@ wss.addEventListener('open', function() {
 });
 
 wss.addEventListener('open', function() {
+  //  alert("Connection");
+  //send("TEST");
   wss.addEventListener('message', (event) => {
+    //alert('Message from server ' + decode_buffer(event.data));
     let decoded = decode_buffer(event.data);
     let splitdecoded = decoded.split(';');
-    console.log(splitdecoded[0]);
     
     if (splitdecoded[0] == "M:") {
       if (splitdecoded[2] == self_name) {
+        //alert(decoded);
         var sender = splitdecoded[1];
         var msg = splitdecoded[3];
+        //add to textbook splitdecoded[2]
 
         let personWhoSent = document.querySelectorAll("#personButton");
         for (let i = 0; i < personWhoSent.length; i++) {
+          //console.log(personWhoSent[i].textContent + " : " + sender);
 
           if (personWhoSent[i].textContent == sender) {
+            //console.log("works");
             let sentTexts = document.querySelector(".Texts");
             sentTexts.innerHTML += `<p id="Irecieve">${msg}</p>`;
           }
@@ -79,14 +89,17 @@ wss.addEventListener('open', function() {
       else if (splitdecoded[1] == self_name) {
         var texter = splitdecoded[2];
         var msg = splitdecoded[3];
+        //add to textbook splitdecoded[2]
 
         let personWhoSent = document.querySelectorAll("#personButton");
         for (let i = 0; i < personWhoSent.length; i++) {
+          //console.log(personWhoSent[i].textContent + " : " + texter);
 
           if (personWhoSent[i].textContent == texter) {
+            // console.log("works");
             let sentTexts = document.querySelector(".Texts");
             sentTexts.innerHTML += `<p id="Igive">${msg}</p>`;
-            msg_sent = "// " + msg.toLowerCase();
+            msg_sent = msg.toLowerCase();
             console.log(encrypt_num);
           }
         }
@@ -94,20 +107,28 @@ wss.addEventListener('open', function() {
 
     }
 
-    else if (splitdecoded[0] == "HR:") {
-      if (splitdecoded[2] == self_name) {
+    else if (splitdecoded[0] == "HR:") { // HR:;hackerName;hackedName; 
+      if (splitdecoded[2] == self_name) {//selfname = j
         send("H:;" + self_name + ";" + splitdecoded[1] + ";" + msg_sent + ";" + encrypt_num);
       }
 
     }
     else if (splitdecoded[0] == "H:") {
   
-      if (splitdecoded[2] == self_name) {
+      if (splitdecoded[2] == self_name) { //hacker = 2
+      //  var msg_got = ;
         localStorage.setItem("msg", splitdecoded[3]);
         localStorage.setItem("msg_sent", JSON.stringify(encrypt_textfile(splitdecoded[3], splitdecoded[4])));
         window.location.href = "./hacking.html";
 
       }
+      //get userinfo, encrypted  etc
+      /*
+      encrypt_num
+      msg_sent
+      
+      */
+
     }
 
   });
@@ -124,8 +145,9 @@ texts();
 
 document.querySelector("#hackBtn").addEventListener('click', function() {
   send("HR:;" + self_name + ";" + send_name + "");
-  window.location.href = "./hacking.html";
+  
 })
+// document.querySelector("#EncryptBtn").addEventListener('click', encrypt_textfile())
 
 
 function encrypt_textfile(msg_var, num) {
@@ -135,7 +157,6 @@ function encrypt_textfile(msg_var, num) {
     if (alphaList.includes(msg_list[i])){
       
       encrypted_msg += alphaList[(alphaList.indexOf(msg_list[i]) + num) % 26];
-      console.log(num);
       
     }    else encrypted_msg += msg_list[i];
     
@@ -157,3 +178,12 @@ num = parseInt(num);
   }
   return encrypted_msg;
 }
+
+
+/*
+
+a 2
+
+(index(a) + 2)%26 => index(c);
+
+*/
